@@ -6,16 +6,17 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
-		<link rel="stylesheet" href="https://sugar.wtf/wizardry.min.css">
-		<link rel="stylesheet" href="https://sugar.wtf/entypo/entypo.css">
+
+		<link rel="stylesheet" href="https://raw.githubusercontent.com/volbil/volbil.github.io/master/entypo/entypo.css">
 		
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment-with-locales.min.js"></script>
 		<script src="https://code.highcharts.com/highcharts.src.js"></script>
 		
-		<link rel="icon" type="image/png" href="https://sugarchain.org/logo.png">
+		<link rel="icon" type="image/png" href="https://cpuchain.org/cpuchain.png">
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap" rel="stylesheet">
 
 		<style>
@@ -78,16 +79,14 @@
 			}
 		</style>
 		<title>Blockchain Explorer</title>
-		<meta name="description" content="Sugarchain Blockchain Explorer">
+		<meta name="description" content="CPUchain Blockchain Explorer">
 	</head>
 	<body>
 		<!-- Navbar -->
 		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
 			<div class="container">
 				<a href="#" class="navbar-brand">
-					<svg id="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2334.36 2334.36"><defs><style>.cls-1{fill:#fff;}</style></defs><title>sug white</title><path class="cls-1" d="M1049.8,669.06l-545,519.05-.14,2,470.65,32.47,589-603.9Zm566.57-103.61,432,748.49-543.06,672L936.07,1837.25,443.65,1185.86l593.23-565,39.08-3.83,540.27-53Z" transform="translate(-83.54 -82.07)"/><path class="cls-1" d="M1250.72,82.07c644.61,0,1167.18,522.56,1167.18,1167.18S1895.33,2416.43,1250.72,2416.43,83.54,1893.86,83.54,1249.25,606.1,82.07,1250.72,82.07ZM2301.18,1366c64.46-580.16-353.59-1102.72-933.74-1167.18S264.72,552.36,200.26,1132.52,553.85,2235.25,1134,2299.7,2236.72,1946.11,2301.18,1366Z" transform="translate(-83.54 -82.07)"/></svg>
-
-					<b>Explorer</b>
+					<b><img src="https://cpuchain.org/cpuchain.png" style="height: 30px; margin-right: 5px;"></img>CPUchain Explorer</b>
 				</a>
 				<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
@@ -97,9 +96,9 @@
 						<li class="nav-item">
 							<a href="#" class="nav-link">Home</a>
 						</li>
-						<li class="nav-item">
+						<!-- li class="nav-item">
 							<a href="/wallet/#/" class="nav-link">Wallet</a>
-						</li>
+						</li -->
 						<li class="nav-item dropdown" id="network-list">
 							<a class="nav-item nav-link dropdown-toggle" href="#" id="network-versions" data-toggle="dropdown">NETWORK</a>
 						  	<div class="dropdown-menu dropdown-menu-right" aria-labelledby="network-versions" >
@@ -185,23 +184,12 @@
 		</div>
 	
 		<!-- Transaction page -->
-		<div id="transaction" class="router-page">
+		<div id="tx" class="router-page">
 			<div class="container">
 				<div id="tx-info-table">
 					
 				</div>
-				<div class="card mb-3" id="tx-info-vout-total">
-					<div class="card-header">
-						Outputs: <b>0</b>
-					</div>
-					<div class="card-body">
-						<div class="list-group">
-						  	<div id="tx-vout-list">
 
-						  	</div>
-						</div>
-					</div>
-				</div>
 				<div class="card mb-3" id="tx-info-vin-total">
 					<div class="card-header">
 						Inputs: <b>0</b>
@@ -210,6 +198,19 @@
 						<div class="list-group">
 						  	<div id="tx-vin-list">
 						  		
+						  	</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="card mb-3" id="tx-info-vout-total">
+					<div class="card-header">
+						Outputs: <b>0</b>
+					</div>
+					<div class="card-body">
+						<div class="list-group">
+						  	<div id="tx-vout-list">
+
 						  	</div>
 						</div>
 					</div>
@@ -269,29 +270,27 @@
 		<!-- Footer :3 -->
 		<footer class="mb-3">
 			<div class="container text-center">
-				Made with <span class="entypo heart text-danger"></span> by <a target="_blank" href="https://github.com/sugarchain-project/blockchain-explorer">Volbil</a>
+				Powered by <a target="_blank" href="https://blockbook.cpuchain.org">Blockbook API</a> |
+				  <a target="_blank" href="https://github.com/cpuchain/cpuchain-explorer">Frontend Source Code</a>
 			</div>
 		</footer>
 
 		<!-- All magic is here :D -->
 		<script>
+			// load 15 blocks per request by default, can add more blocks but it will make the page slower
+			const LOAD_BLOCK = 15
 			// Config
 			var networksConfigs = {
-				'SUGAR': {
-					'name': 'Main Network (SUGAR)',
-					// 'api': 'https://api.sugarchain.org',
-					'api': 'https://api.sugar.wtf',
-					'ticker': 'SUGAR',
+				'CPU': {
+					'name': 'CPUchain',
+					'api': 'https://blockbook.cpuchain.org/api/v2',
+					'ticker': 'CPU',
 					'decimals': 8,
-					'hrp': 'sugar'
+					'hrp': 'cpu',
+					blockTime: 60,
+					reward: 50,
+					halvingInterval: 1050000
 				},
-				// 'TSUGAR': {
-				// 	'name': 'Test Network (TUGAR)',
-				// 	'api': 'https://api-testnet.sugarchain.org',
-				// 	'ticker': 'TUGAR',
-				// 	'decimals': 8,
-				// 	'hrp': 'tugar'
-				// }
 			}
 
 			// Error messages
@@ -309,7 +308,6 @@
 
 			function showCharts(data) {
 				var step = 2
-
 				if ($(document).width() < 576) {
 					step = 9
 				} else if ($(document).width() < 1200) {
@@ -443,6 +441,13 @@
 				$('.highcharts-credits').hide();
 			}
 
+			function getHashFromDiff(difficulty) {
+				const { blockTime } = getApi()
+
+				// https://en.bitcoin.it/wiki/Difficulty
+				return Math.floor(Number(difficulty) * 2**32 / blockTime)
+			}
+
 			// Convert amount of hashes to readable form
 			function convertHashes(hashes) {
 				if (hashes >= 1000000000000000000000) {
@@ -462,6 +467,34 @@
 				} else {
 					return hashes + ' H/s'
 				}
+			}
+
+			function calculateSupply(height = 0) {
+				const { reward, halvingInterval } = getApi();
+				const halvings_count = Math.floor(height / halvingInterval);
+				let supply = 0;
+				let count = 0;
+				let currentReward = reward;
+
+				while (halvings_count >= count) {
+					const blocks = halvings_count > count
+					  ? halvingInterval
+						: height % halvingInterval;
+
+					supply += currentReward * blocks;
+					currentReward = currentReward / 2;
+					count++;
+				}
+
+				return supply;
+			}
+
+			function range(size, startAt = 0) {
+				return [...Array(size).keys()].map(i => i + startAt);
+			}
+
+			function sleep(ms = 0) {
+				return new Promise(resolve => setTimeout(resolve, ms));
 			}
 
 			// Display doc links
@@ -512,7 +545,7 @@
 			}
 
 			// SPA router function
-			function routePage() {
+			async function routePage() {
 				var urlParams = readParams()
 				if (window.location.hash == '') {
 					window.location.replace(window.location.href.split('#')[0] + '#/')
@@ -535,7 +568,7 @@
 							var block_hash = urlParams[2]
 							var api = urlParams[3]
 							var data_block_hash = $('#block-info-hash').attr('data-block-info-hash')
-							if (block_hash != undefined && block_hash.length == 64) {
+							if (block_hash != undefined) {
 								if (api != undefined) {
 									page = urlParams[1] + '/' + urlParams[2]
 									switchApi(api, page)
@@ -543,15 +576,17 @@
 									if (data_block_hash != urlParams[2]) {
 										$('#block-info-tx-total').addClass('d-none')
 										$('#block-info-table').empty()
-										blockInfo(block_hash).then(function(block) {
-											if (block['error'] == undefined) {
-												setTitle('Block #' + block.result.height)
-												displayBlockInfo(block.result)
-											} else {
-												showError(errorMessages['blocks-not-found'])
-												switchPage()
-											}
-										})
+
+										try {
+											const block = await blockInfo(block_hash)
+
+											displayBlockInfo(block)
+											setTitle('Block #' + block.height)
+										} catch (err) {
+											console.log(err)
+											showError(errorMessages['blocks-not-found'])
+											switchPage()
+										}
 									} else {
 										setTitle('Block #' + block_hash)
 									}
@@ -565,7 +600,7 @@
 							break
 
 						// Transaction info page
-						case 'transaction':
+						case 'tx':
 							var tx_hash = urlParams[2]
 							var api = urlParams[3]
 							var data_tx_hash = $('#tx-info-hash').attr('data-tx-info-hash')
@@ -578,15 +613,17 @@
 										$('#tx-info-vout-total').addClass('d-none')
 										$('#tx-info-vin-total').addClass('d-none')
 										$('#tx-info-table').empty()
-										transactionInfo(tx_hash).then(function(tx) {
-											if (tx['error'] == undefined) {
-												setTitle('Transaction ' + tx_hash)
-												displayTransactionInfo(tx.result)
-											} else {
-												showError(errorMessages['tx-not-found'])
-												switchPage()
-											}
-										})
+
+										try {
+											const txData = await transactionInfo(tx_hash)
+
+											setTitle('Transaction ' + tx_hash)
+											displayTransactionInfo(txData)
+										} catch (err) {
+											console.log(err)
+											showError(errorMessages['tx-not-found'])
+											switchPage()
+										}
 									} else {
 										setTitle('Transaction ' + data_tx_hash)
 									}
@@ -610,15 +647,17 @@
 									if (data_address != urlParams[2]) {
 										$('#address-history').addClass('d-none')
 										$('#address-info-table').empty()
-										addressBalance(address).then(function(data) {
-											if (data['error'] == undefined) {
-												setTitle('Address ' + address)
-												displayAddressInfo(data.result, address)
-											} else {
-												showError(errorMessages['not-valid-address'])
-												switchPage()
-											}
-										})
+
+										try {
+											const addrData = await addressHistory(address)
+
+											setTitle('Address ' + address)
+											displayAddressInfo(addrData)
+										} catch (err) {
+											console.log(err)
+											showError(errorMessages['not-valid-address'])
+											switchPage()
+										}
 									} else {
 										setTitle('Address ' + data_address)
 									}
@@ -634,7 +673,7 @@
 						case 'height':
 							block_height = urlParams[2]
 							if (block_height != undefined && isNumeric(block_height)) {
-								blockHeight(urlParams[2]).then(function(block) {
+								blockInfo(urlParams[2]).then(function(block) {
 									setTitle('Loading')
 									if (block['error'] == undefined) {
 										switchPage('block', [block['result']['hash']])
@@ -687,85 +726,101 @@
 
 			// Set window title
 			function setTitle(title) {
-				document.title = title + ' | Sugar Explorer';
+				document.title = title + ` | ${getApi()['name']} Explorer`;
 			}
 
-			// Bocks request
-			function getBlocks(start, offset = 30) {
-				return Promise.resolve($.ajax({
-					'url': getApi()['api'] + '/range/' + start + '?offset=' + offset,
-				})).then(function(data) {
-					return data
-				})
+			// Blocks request
+			function getBlocks(blocks = []) {
+				return Promise.all(blocks.map(async (block, index) => {
+					// sleep to comply with rate limits
+					await sleep(index * 20);
+
+					const resp = await fetch(`${getApi()['api']}/block/${block}`, {
+						method: 'GET',
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					});
+					
+					const data = await resp.json();
+
+					return {
+						height: data.height,
+						hash: data.hash,
+						difficulty: Number(data.difficulty),
+						nethash: getHashFromDiff(data.difficulty),
+						merkleRoot: data.merkleRoot,
+						nonce: data.nonce,
+						previousBlockHash: data.previousBlockHash,
+						size: data.size,
+						time: data.time,
+						txCount: data.txCount,
+						version: data.version
+					}
+				}))
 			}
 
 			// Block info
-			function blockInfo(hash, offset = 0) {
-				return Promise.resolve($.ajax({
-					'url': getApi()['api'] + '/block/' + hash + '?offset=' + offset,
-				})).then(function(data) {
-					return data
-				})
+			async function blockInfo(block, offset = 1) {
+				const resp = await fetch(`${getApi()['api']}/block/${block}?page=${offset}`, {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
+
+				const data = await resp.json();
+				
+				return data
 			}
 
 			// Get transaction info
-			function transactionInfo(hash) {
-				return Promise.resolve($.ajax({
-					'url': getApi()['api'] + '/transaction/' + hash,
-				})).then(function(data) {
-					return data
-				})
-			}
+			async function transactionInfo(hash) {
+				const resp = await fetch(`${getApi()['api']}/tx/${hash}`, {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
 
-			// Get address balance
-			function addressBalance(address) {
-				return Promise.resolve($.ajax({
-					'url': getApi()['api'] + '/balance/' + address,
-				})).then(function(data) {
-					return data
-				})
+				const data = await resp.json();
+				
+				return data
 			}
 
 			// Get address history
-			function addressHistory(address, offset = 0) {
-				return Promise.resolve($.ajax({
-					'url': getApi()['api'] + '/history/' + address + '?offset=' + offset,
-				})).then(function(data) {
-					return data
-				})
+			async function addressHistory(address, offset = 1) {
+				const resp = await fetch(`${getApi()['api']}/address/${address}?page=${offset}&details=txs`, {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
+
+				const data = await resp.json();
+				
+				return data
 			}
 
 			// Get current network info
-			function networkInfo() {
-				return Promise.resolve($.ajax({
-					'url': getApi()['api'] + '/info',
-				})).then(function(data) {
-					return data
-				})
-			}
+			async function networkInfo() {
+				const resp = await fetch(getApi()['api'] + '/info', {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
 
-			// Get circulating supply
-			function networkSupply() {
-				return Promise.resolve($.ajax({
-					'url': getApi()['api'] + '/supply',
-				})).then(function(data) {
-					return data
-				})
-			}
-
-			// Get block by height
-			function blockHeight(height) {
-				return Promise.resolve($.ajax({
-					'url': getApi()['api'] + '/height/' + height,
-				})).then(function(data) {
-					return data
-				})
+				const data = await resp.json();
+				
+				return data.backend
 			}
 
 			// Display stuffs here~
 			function displayBlocks(blocks, prepend = false) {
-				blocks = prepend ? blocks.reverse() : blocks
-				blocks.forEach(function(block, index) {
+				const newBlocks = prepend ? [...blocks].reverse() : [...blocks] 
+
+				newBlocks.forEach(function(block, index) {
 					if ($('tr[data-height="' + block.height + '"]').length == 0) {
 						var content = `
 							<tr data-height="${block.height}">
@@ -783,7 +838,7 @@
 									</a>
 								</td>
 								<td>
-									${block.txcount != undefined ? block.txcount : '1'}
+									${block.txCount != undefined ? block.txCount : '1'}
 								</td>
 							</tr>`
 
@@ -813,7 +868,7 @@
 									</tr>
 									<tr>
 										<td>Timestamp</td>
-										<td>${timeFormat(data.time)} (<b>${data.time}</b>)</td>
+										<td>${timeFormat(data.time)} (${moment.unix(data.time).fromNow()}) (<b>${data.time}</b>)</td>
 									</tr>
 									<tr>
 										<td>Block Hash</td>
@@ -822,8 +877,8 @@
 									<tr>
 										<td>Previous Block</td>
 										<td>
-											<a class="${'previousblockhash' in data ? '' : 'd-none'}" href="#/block/${data.previousblockhash}">${data.previousblockhash}</a>
-											<span class=${'previousblockhash' in data ? 'd-none' : ''}>
+											<a class="${'previousBlockHash' in data ? '' : 'd-none'}" href="#/block/${data.previousBlockHash}">${data.previousBlockHash}</a>
+											<span class=${'previousBlockHash' in data ? 'd-none' : ''}>
 												<b>Genesis Block</b>
 											</span>
 										</td>
@@ -831,19 +886,19 @@
 									<tr>
 										<td>Next Block</td>
 										<td>
-											${data.nextblockhash != undefined ? `
-												<a href="#/block/${data.nextblockhash}">
-													${data.nextblockhash}
+											${data.nextBlockHash != undefined ? `
+												<a href="#/block/${data.nextBlockHash}">
+													${data.nextBlockHash}
 												</a>
 											` : `
-												<b>This is latest block</b>
+												<b>This is the latest block</b>
 											`}
 										</td>
 									</tr>
 									<tr>
 										<td>Merkle Root</td>
 										<td>
-											${data.merkleroot}
+											${data.merkleRoot}
 										</td>
 									</tr>
 									<tr>
@@ -852,7 +907,7 @@
 									</tr>
 									<tr>
 										<td>Version</td>
-										<td>${data.versionHex}</td>
+										<td>${data.version}</td>
 									</tr>
 									<tr>
 										<td>Bits</td>
@@ -863,16 +918,12 @@
 										<td>${data.size} Bytes</td>
 									</tr>
 									<tr>
-										<td>Stripped Size</td>
-										<td>${data.strippedsize} Bytes</td>
-									</tr>
-									<tr>
 										<td>Difficulty</td>
 										<td>${data.difficulty}</td>
 									</tr>
 									<tr>
 										<td>Transactions</td>
-										<td>${data.txcount}</td>
+										<td>${data.txCount}</td>
 									</tr>
 								</tbody>
 							</table>
@@ -881,9 +932,9 @@
 
 				$('#block-info-table').html(content)
 
-				displayTransactions($('#block-transactions'), data.tx)
+				displayTransactions($('#block-transactions'), data.txs, data.page)
 
-				if (data.txcount > $('#block-transactions').children().length) {
+				if (data.txCount > $('#block-transactions').children().length) {
 					$('#more-block-transactions').removeClass('d-none')
 				} else {
 					$('#more-block-transactions').addClass('d-none')
@@ -902,17 +953,17 @@
 										<td>Transaction Hash</td>
 										<td id="tx-info-hash" data-tx-info-hash="${data.txid}">${data.txid}</td>
 									</tr>
-									${data.time != undefined ? `
+									${data.blockTime ? `
 										<tr>
 											<td>Timestamp</td>
-											<td>${timeFormat(data.time)} (<b>${data.time}</b>)</td>
+											<td>${timeFormat(data.blockTime)} (${moment.unix(data.blockTime).fromNow()}) (<b>${data.blockTime}</b>)</td>
 										</tr>
 									` : ''}
 									<tr>
 										<td>Height</td>
 										<td>
-											${data.blockhash != undefined ? `
-												<a href="#/block/${data.blockhash}">${data.height}</a> (<b>Confirmations ${data.confirmations}</b>)
+											${data.blockHash ? `
+												<a href="#/block/${data.blockHash}">${data.blockHeight}</a> (<b>Confirmations ${data.confirmations}</b>)
 											` : `
 												<span class="text-danger">This transaction located in memory pool and not included to blockchain yet!</span>
 											`}
@@ -920,20 +971,32 @@
 									</tr>
 									<tr>
 										<td>Amount Transferred</td>
-										<td><span class="text-monospace">${amountFormat(data.amount)}</span> <b>${getApi()['ticker']}</b></td>
+										<td><span class="text-monospace">${amountFormat(Number(data.valueIn))}</span> <b>${getApi()['ticker']}</b></td>
+									</tr>
+									<tr>
+										<td>Fees</td>
+										<td><span class="text-monospace">${amountFormat(Number(data.fees))}</span> <b>${getApi()['ticker']}</b></td>
 									</tr>
 									<tr>
 										<td>Size</td>
 										<td>${data.size} (bytes)</td>
 									</tr>
+									${data.vsize ? `
+									<tr>
+										<td>vSize</td>
+										<td>${data.vsize}</td>
+									</tr>
+									` : ''}
 									<tr>
 										<td>Version</td>
 										<td>${data.version}</td>
 									</tr>
-									<tr class="${data.locktime == 0 ? 'd-none' : ''}">
+									${data.lockTime ? `
+									<tr>
 										<td>Locktime</td>
-										<td>${data.locktime}</td>
+										<td>${data.lockTime}</td>
 									</tr>
+									` : ''}
 								</tbody>
 							</table>
 						</div>
@@ -945,19 +1008,7 @@
 				$('#tx-vout-list').empty()
 				$('#tx-vin-list').empty()
 
-				var vin_amount = 0
-				data.vin.forEach(function(vin) {
-					vin_amount += vin.value
-				})
-
-				var vout_amount = 0
-				data.vout.forEach(function(vout) {
-					vout_amount += vout.value
-				})
-
-				var fee = vin_amount - vout_amount
-
-				displayTxVout(data.vout, fee)
+				displayTxVout(data.vout, Number(data.fees))
 				displayTxVin(data.vin)
 
 				$('#tx-info-vout-total').removeClass('d-none')
@@ -972,7 +1023,7 @@
 				e.preventDefault()
 			}
 
-			function displayAddressInfo(data, address) {
+			function displayAddressInfo(data) {
 				$('#address-transactions').empty()
 				content = `
 					<div class="card mb-3">
@@ -981,22 +1032,34 @@
 								<tbody>
 									<tr>
 										<td>Address</td>
-										<td id="data-address" data-address="${address}">
-											${address}
-											<a href="#" onclick="showQrModal(event, '${address}')">(QR)</a>
+										<td id="data-address" data-address="${data.address}">
+											${data.address}
+											<a href="#" onclick="showQrModal(event, '${data.address}')">(QR)</a>
 										</td>
 									</tr>
 									<tr>
 										<td>Hash160</td>
-										<td>${hash160(address)}</td>
-									</tr>
-									<tr>
-										<td>Received</td>
-										<td><span class="text-monospace">${amountFormat(data.received)}</span> <b>${getApi()['ticker']}</b></td>
+										<td>${hash160(data.address)}</td>
 									</tr>
 									<tr>
 										<td>Balance</td>
-										<td><span class="text-monospace">${amountFormat(data.balance)}</span> <b>${getApi()['ticker']}</b></td>
+										<td><span class="text-monospace">${amountFormat(Number(data.balance))}</span> <b>${getApi()['ticker']}</b></td>
+									</tr>
+									<tr>
+										<td>Unconfirmed Balance</td>
+										<td><span class="text-monospace">${amountFormat(Number(data.unconfirmedBalance))}</span> <b>${getApi()['ticker']}</b></td>
+									</tr>
+									<tr>
+										<td>Received</td>
+										<td><span class="text-monospace">${amountFormat(Number(data.totalReceived))}</span> <b>${getApi()['ticker']}</b></td>
+									</tr>
+									<tr>
+										<td>Sent</td>
+										<td><span class="text-monospace">${amountFormat(Number(data.totalSent))}</span> <b>${getApi()['ticker']}</b></td>
+									</tr>
+									<tr>
+										<td>Txs</td>
+										<td><span class="text-monospace">${data.txs}</span></td>
 									</tr>
 								</tbody>
 							</table>
@@ -1005,18 +1068,14 @@
 
 				$('#address-info-table').html(content)
 
-				addressHistory(address).then(function(data) {
-					if (data.error == undefined) {
-						if (data.result.txcount > 10 && data.result.tx.length >= 10) {
-							$('#more-address-transactions').removeClass('d-none')
-						} else {
-							$('#more-address-transactions').addClass('d-none')
-						}
+				if (data.page !== data.totalPages) {
+					$('#more-address-transactions').removeClass('d-none')
+				} else {
+					$('#more-address-transactions').addClass('d-none')
+				}
 
-						$('#address-info .address-tx-count').text(data.result.txcount)
-						displayTransactions($('#address-transactions'), data.result.tx)
-					}
-				})
+				$('#address-info .address-tx-count').text(data.txs)
+				displayTransactions($('#address-transactions'), data.transactions, data.page)
 			}
 
 			function parseTransactionDetails(data) {
@@ -1037,22 +1096,23 @@
 				outputs = {}
 
 				data.vin.forEach(function(vin, index) {
-					if (vin.coinbase != undefined) {
+					const vinValue = Number(vin.value)
+					if (!vin.isAddress && !vinValue) {
 						status.coinbase = true
 						status.from += `
 							<li class="list-group-item">
 								Newly Generated Coins (<b>Coinbase Transaction</b>)
 							</li>`
-					} else if (vin.value != undefined) {
-						var address = vin.scriptPubKey.addresses[0]
+					} else if (vinValue) {
+						var address = vin.addresses[0]
 
 						if (address in inputs) {
-							inputs[address] += vin.value
+							inputs[address] += vinValue
 						} else {
-							inputs[address] = vin.value
+							inputs[address] = vinValue
 						}
 
-						status.input += vin.value
+						status.input += vinValue
 					}
 				})
 
@@ -1072,18 +1132,19 @@
 				}
 
 				data.vout.forEach(function(vout, index) {
-					if (vout.value != undefined) {
-						if (vout.scriptPubKey.addresses != undefined) {
-							var address = vout.scriptPubKey.addresses[0]
+					const voutValue = Number(vout.value)
+					if (voutValue) {
+						if (vout.addresses) {
+							var address = vout.addresses[0]
 
 							if (address in outputs) {
-								outputs[address] += vout.value
+								outputs[address] += voutValue
 							} else {
-								outputs[address] = vout.value
+								outputs[address] = voutValue
 							}
 						}
 
-						status.output += vout.value
+						status.output += voutValue
 					}
 				})
 
@@ -1105,12 +1166,19 @@
 				if (!status.coinbase) {
 					status.fee = status.input - status.output
 					content = `
+					  <li class="list-group-item">
+							<b>Output:</b>
+							<small class="float-right text-muted">
+								<span class="text-monospace">${amountFormat(status.output)}</span> <b>${getApi()['ticker']}</b>
+							</small>
+						</li>
 						<li class="list-group-item">
 							<b>Total fee:</b>
 							<small class="float-right text-muted">
 								<span class="text-monospace">${amountFormat(status.fee)}</span> <b>${getApi()['ticker']}</b>
 							</small>
-						</li>`
+						</li>
+					`
 
 					status.to += content
 				}
@@ -1123,44 +1191,44 @@
 				return status
 			}
 
-			function loadTransactions(holder) {
-				holder.find('[data-transaction][data-transaction-loaded=false]').each(function() {
-					var tx = $(this)
-					transactionInfo(tx.attr('data-transaction'), true).then(function(data) {
-						if (data.error == undefined) {
-							tx.find('.transaction-time').text(timeFormat(data.result.time)).removeClass('d-none')
+			function loadTransactions(holder, data) {
+				holder.find('[data-transaction][data-transaction-loaded=false]').each(async function() {
+					try {
+						var tx = $(this)
+						const txid = tx.attr('data-transaction')
+						const txData = data?.find(t => t.txid === txid) || await transactionInfo(tx.attr('data-transaction'))
 
-							var status = parseTransactionDetails(data.result)
+						tx.find('.transaction-time').text(timeFormat(txData.blockTime)).removeClass('d-none')
 
-							if (status.hide) {
-								tx.addClass('d-none')
-							} else {
-								tx.find('hr').removeClass('d-none')
-								tx.find('.transaction-from').removeClass('d-none')
-								tx.find('.transaction-to').removeClass('d-none')
-
-								tx.find('.transaction-badge .badge').text(status.badge.text).removeClass('d-none')
-								tx.find('.transaction-badge .badge').addClass(status.badge.class)
-								tx.find('.transaction-badge').removeClass('d-none')
-
-								tx.find('.transaction-from ul').append(status.from)
-								tx.find('.transaction-to ul').append(status.to)
-							}
-
-							tx.attr('data-transaction-loaded', true)
+						const status = parseTransactionDetails(txData)
+						if (status.hide) {
+							tx.addClass('d-none')
+						} else {
+							tx.find('hr').removeClass('d-none')
+							tx.find('.transaction-from').removeClass('d-none')
+							tx.find('.transaction-to').removeClass('d-none')
+							
+							tx.find('.transaction-badge .badge').text(status.badge.text).removeClass('d-none')
+							tx.find('.transaction-badge .badge').addClass(status.badge.class)
+							tx.find('.transaction-badge').removeClass('d-none')
+							
+							tx.find('.transaction-from ul').append(status.from)
+							tx.find('.transaction-to ul').append(status.to)
 						}
-					})
+						tx.attr('data-transaction-loaded', true)
+					} catch (err) {
+						console.log(err)
+					}
 				})
 			}
 
-			function displayTransactions(holder, data, offset = 0) {
-				var index = offset
-				data.forEach(function(transaction) {
+			function displayTransactions(holder, data, offset = 1) {
+				data.forEach(function(tx) {
 					content = `
-						<div class="card mt-3 light-shadow" data-transaction="${transaction}" data-transaction-index="${index}" data-transaction-loaded="false">
+						<div class="card mt-3 light-shadow" data-transaction="${tx.txid}" data-transaction-index="${offset}" data-transaction-loaded="false">
 							<div class="card-header">
-								Transaction: <a href="#/transaction/${transaction}">
-									${transaction}
+								Transaction: <a href="#/tx/${tx.txid}">
+									${tx.txid}
 								</a>
 								<span class="transaction-badge">
 									<span class="ml-1 badge"></span>
@@ -1189,7 +1257,6 @@
 							</div>
 						</div>`
 					holder.append(content)
-					index += 1
 				})
 
 				if (data.length > 0) {
@@ -1198,25 +1265,25 @@
 					$('#more-block-transactions').addClass('d-none')
 				}
 
-				loadTransactions(holder)
+				loadTransactions(holder, data)
 			}
 
 			function displayTxVout(vout_list, fee = 0) {
 				vout_list.forEach(function(vout, index) {
 					if ($('#tx-vout-list').find(`[data-tx-vout-index="${index}"]`).length == 0) {
-						if (vout.scriptPubKey.type != 'nulldata') {
+						if (vout.isAddress) {
 							var content = `
-								<a href="#/address/${vout.scriptPubKey.addresses[0]}" data-tx-vout-index="${vout.vout_index}" class="list-group-item list-group-item-action flex-column align-items-start">
+								<a href="#/address/${vout.addresses[0]}" data-tx-vout-index="${vout.vout_index}" class="list-group-item list-group-item-action flex-column align-items-start">
 									<div class="row">
 										<div class="col-md-9 col-sm-12 col-xs-12">
 											<span class="text-muted mr-1">
 												<span class="entypo down text-success"></span>
 											</span>
-											<span class="text-primary">${vout.scriptPubKey.addresses[0]}</span>
+											<span class="text-primary">${vout.addresses[0]}</span>
 										</div>
 										<div class="col-md-3 col-sm-12 col-xs-12 text-md-right">
 											<small class="text-muted">
-												<span class="text-monospace">${amountFormat(vout.value)}</span> <b>${getApi()['ticker']}</b>
+												<span class="text-monospace">${amountFormat(Number(vout.value))}</span> <b>${getApi()['ticker']}</b>
 											</small>
 										</div>
 									</div>
@@ -1226,7 +1293,7 @@
 						} else {
 							var content = `
 								<li class="list-group-item">
-									<code>${vout.scriptPubKey.asm}</code>
+									<code>${vout.addresses?.[0] || vout.hex}</code>
 								</li>
 							`
 
@@ -1261,14 +1328,14 @@
 										<span class="text-muted mr-1">
 											<span class="entypo up text-danger"></span>
 										</span>
-										<a href="#/address/${vin.scriptPubKey.addresses[0]}">
-											${vin.scriptPubKey.addresses[0]}
+										<a href="#/address/${vin.addresses[0]}">
+											${vin.addresses[0]}
 										</a>
 										(<a href="#/tx/${vin['txid']}">Output</a>)
 									</div>
 									<div class="col-md-3 col-sm-12 col-xs-12 text-md-right">
 										<small class="text-muted">
-											<span class="text-monospace">${amountFormat(vin.value)}</span> <b>${getApi()['ticker']}</b>
+											<span class="text-monospace">${amountFormat(Number(vin.value))}</span> <b>${getApi()['ticker']}</b>
 										</small>
 									</div>
 								</div>
@@ -1280,71 +1347,75 @@
 				})
 			}
 
-			function displayHistory(address, history_list) {
-				var total = $('#address-history .card-header b').text()
-				history_list.forEach(function(tx_info, index) {
-					if ($('#address-history-list').find(`[data-address-history-index="${tx_info.tx_index}"]`).length == 0) {
-						var content = `
-							<a href="#/tx/${tx_info.data.txid}" data-address-history-index="${tx_info.tx_index}" class="list-group-item list-group-item-action flex-column align-items-start">
-								<div class="row">
-									<div class="col-md-9 col-sm-12 col-xs-12">
-										<!-- <span class="text-muted mr-1">
-											<span class="entypo up text-danger"></span>
-										</span> -->
-										<span class="text-primary">${tx_info.data.txid}</span>
-									</div>
-									<div class="col-md-3 col-sm-12 col-xs-12 text-md-right">
-										<small class="text-muted">
-											${tx_info.data.height > 0 ? '#' + tx_info.data.height : 'Mempool'}
-										</small>
-									</div>
-								</div>
-							</a>`
+			let cachedBlocks = []
 
-						$('#address-history-list').append(content)
+			function drawChart() {
+				const chart_data = {
+						'diffs': [],
+						'blocks': [],
+						'sizes': [],
+						'timestamps': [],
+						'txs': [],
+						'nethash': []
 					}
-				})
+
+					cachedBlocks.forEach((block) => {
+						chart_data['diffs'].push(block['difficulty'])
+						chart_data['blocks'].push(block['height'])
+						chart_data['sizes'].push(block['size'])
+						chart_data['timestamps'].push(block['time'])
+						chart_data['txs'].push(block['txCount'])
+						chart_data['nethash'].push(block['nethash'])
+					})
+
+					showCharts(chart_data)
 			}
 
-			function displayHome() {
-				$('#supply span').text('Loading...')
-				networkInfo().then(function(data) {
-					var height = data.result.blocks
-					var display_height = Number($('#blocks-table tbody tr:first-child').attr('data-height'))
+			/**
+			 * Since current API doesn't support fetching recent block hashes,
+			 * We simply ignore reorgs and it wouldn't be shown at the main page unless refreshed
+			 * To fix this, either blockbook needs to support fetching multiple block hashes,
+			 * Or we use websocket subscription here
+			 */
+			async function displayHome() {
+				try {
+					$('#supply span').text('Loading...')
+					const infoData = await networkInfo()
+					const current_height = infoData.headers
+					const display_height = cachedBlocks[0]?.height
+					const circulatingSupply = calculateSupply(current_height)
 
-					circulatingSupply = parseInt(amountFormat(data.result.supply))
-					$('#supply span').text(circulatingSupply.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' ' + getApi()['ticker']);
+					$('#supply span').text(circulatingSupply.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' ' + getApi()['ticker'])
 
-					if (height != display_height || $('#blocks-table tbody tr').length > 0) {
-						getBlocks(height).then(function(blocks) {
-							if (blocks['error'] == undefined) {
-								displayBlocks(blocks['result'], true)
-
-								var chart_data = {
-									'diffs': [],
-									'blocks': [],
-									'sizes': [],
-									'timestamps': [],
-									'txs': [],
-									'nethash': []
-								}
-
-								$.each(blocks['result'].reverse(), function(index, block) {
-									chart_data['diffs'].push(block['difficulty'])
-									chart_data['blocks'].push(block['height'])
-									chart_data['sizes'].push(block['size'])
-									chart_data['timestamps'].push(block['time'])
-									chart_data['txs'].push(block['txcount'])
-									chart_data['nethash'].push(block['nethash'])
-								})
-
-								showCharts(chart_data)
-							} else {
-								showError(errorMessages['blocks-load-error'])
-							}
-						})
+					const start_height = display_height || (current_height > LOAD_BLOCK ? current_height - LOAD_BLOCK : 0)
+					let block_diff = current_height - start_height
+					if (block_diff <= 0) {
+						return
 					}
-				})
+
+					const blocksToFetch = range(block_diff, start_height + 1).reverse()
+
+					const blocks = await getBlocks(blocksToFetch)
+
+					const uniqueBlocks = new Set();
+
+					cachedBlocks = [
+						...blocks,
+						...cachedBlocks
+					].filter(b => {
+						if (!uniqueBlocks.has(b.hash)) {
+							uniqueBlocks.add(b.hash)
+							return true
+						}
+						return false
+					})
+
+					displayBlocks(blocks, true)
+					drawChart()
+				} catch (err) {
+					console.log(err)
+					showError(errorMessages['blocks-load-error'])
+				}
 			}
 
 			// Set cookie
@@ -1578,72 +1649,99 @@
 					displayHome()
 				})
 
-				$('#more').click(function() {
-					var height = Number($('tr[data-height]').last().attr('data-height'))
-					getBlocks(height).then(function(blocks) {
-						if (blocks['error'] == undefined) {
-							displayBlocks(blocks['result'])
+				$('#more').click(async function() {
+					try {
+						const height = cachedBlocks[cachedBlocks.length - 1]?.height
+						
+						if (!height) {
+							return
 						}
-					})
-				})
-
-				$('#more-block-transactions').click(function() {
-					var data_block_hash = $('#block-info-hash').text()
-					var offset = Number($('#block-transactions [data-transaction-index]').last().attr('data-transaction-index')) + 1
-					blockInfo(data_block_hash, offset).then(function(data) {
-						if (data.error == undefined) {
-							if (data.result.txcount > 10 && data.result.tx.length >= 10) {
-								$(this).removeClass('d-none')
-							} else {
-								$(this).addClass('d-none')
+						
+						const start_height = height > LOAD_BLOCK ? height - LOAD_BLOCK : 0
+						const block_diff = height - start_height
+						const blocksToFetch = range(block_diff, start_height + 1).reverse()
+						
+						const blocks = await getBlocks(blocksToFetch)
+						
+						const uniqueBlocks = new Set();
+						
+						cachedBlocks = [
+							...cachedBlocks,
+							...blocks
+						].filter(b => {
+							if (!uniqueBlocks.has(b.hash)) {
+								uniqueBlocks.add(b.hash)
+								return true
 							}
-
-							displayTransactions($('#block-transactions'), data.result.tx, offset)
-						}
-					})
+							return false
+						})
+						
+						displayBlocks(blocks)
+						drawChart()
+					} catch (err) {
+						console.log(err)
+					}
 				})
 
-				$('#more-address-transactions').click(function() {
-					var data_address_link = $('#data-address').attr('data-address')
-					var offset = Number($('#address-transactions [data-transaction-index]').last().attr('data-transaction-index')) + 1
-					addressHistory(data_address_link, offset).then(function(data) {
-						if (data.error == undefined) {
-							if (data.result.txcount > 10 && data.result.tx.length >= 10) {
-								$(this).removeClass('d-none')
-							} else {
-								$(this).addClass('d-none')
-							}
+				$('#more-block-transactions').click(async function() {
+					const data_block_hash = $('#block-info-hash').text()
+					const offset = Number($('#block-transactions [data-transaction-index]').last().attr('data-transaction-index')) + 1
 
-							displayTransactions($('#address-transactions'), data.result.tx, offset)
-						}
-					})
+					const blockData = await blockInfo(data_block_hash, offset)
+
+					if (blockData.page !== blockData.totalPages) {
+						$(this).removeClass('d-none')
+					} else {
+						$(this).addClass('d-none')
+					}
+					
+					displayTransactions($('#block-transactions'), blockData.txs, offset)
 				})
 
-				$('#search-form').submit(function(e) {
+				$('#more-address-transactions').click(async function() {
+					const data_address_link = $('#data-address').attr('data-address')
+					const offset = Number($('#address-transactions [data-transaction-index]').last().attr('data-transaction-index')) + 1
+
+					const addrData = await addressHistory(data_address_link, offset)
+
+					if (addrData.page !== addrData.totalPages) {
+						$(this).removeClass('d-none')
+					} else {
+						$(this).addClass('d-none')
+					}
+					
+					displayTransactions($('#address-transactions'), addrData.transactions, offset)
+				})
+
+				$('#search-form').submit(async function(e) {
+					e.preventDefault()
 					var search = $('#search-form input').val().trim()
 
-					if (search != '') {
-						if (isNumeric(search)) {
-							switchPage('height', [search])
-						} else {
-							if (search.length == 64) {
-								blockInfo(search).then(function(data) {
-									if (data.error == undefined) {
-										switchPage('block', [search])
-									} else {
-										switchPage('transaction', [search])
-									}
-								})
+					if (search) {
+						try {
+							if (isNumeric(search)) {
+								await blockInfo(search)
+								switchPage('block', [search])
+							} else if (search.length == 64) {
+								try {
+									await blockInfo(search)
+									switchPage('block', [search])
+								} catch {
+									await transactionInfo(search)
+									switchPage('tx', [search])
+								}
 							} else if (search.length == 34 || search.substring(0, 5) == getApi()['hrp']) {
 								switchPage('address', [search])
 							} else {
 								showError(errorMessages['search-error'])
 							}
+							
+							$('#search-form input').val('')
+						} catch (err) {
+							console.log(err)
+							showError(errorMessages['search-error'])
 						}
 					}
-
-					$('#search-form input').val('')
-					e.preventDefault()
 				})
 
 				window.setInterval(function() {
