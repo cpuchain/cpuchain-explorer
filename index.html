@@ -378,7 +378,7 @@
 
 							$.each(this.points, function(i, point) {
 								text = point.y
-								if (i == 3) {
+								if (i === 3) {
 									text = convertHashes(point.y)
 								}
 
@@ -509,7 +509,7 @@
 			// Get current network config
 			function getApi() {
 				var network = readCookie('network')
-				if (network == null || networksConfigs[network] == undefined) {
+				if (!network || !networksConfigs[network]) {
 					setCookie('network', Object.keys(networksConfigs)[0], 60)
 					network = readCookie('network')
 				}
@@ -520,7 +520,7 @@
 			// Switch network
 			function switchApi(network, page = '') {
 				network = network.toUpperCase()
-				if (networksConfigs[network] != undefined & networksConfigs[network] != getApi()) {
+				if (networksConfigs[network] & networksConfigs[network] !== getApi()) {
 					setCookie("network", network, 60)
 					$('#blocks-table tbody').empty()
 					$('#block-info-hash').empty()
@@ -540,22 +540,22 @@
 				$('#network-list .dropdown-menu').empty()
 
 				for (var key in networksConfigs) {
-					$('#network-list .dropdown-menu').append(`<a class="dropdown-item ${networksConfigs[key]['name'] == network['name'] ? 'active' : ''}" href="#/network/${key}">${networksConfigs[key]['name']}</a>`)
+					$('#network-list .dropdown-menu').append(`<a class="dropdown-item ${networksConfigs[key]['name'] === network['name'] ? 'active' : ''}" href="#/network/${key}">${networksConfigs[key]['name']}</a>`)
 				}
 			}
 
 			// SPA router function
 			async function routePage() {
 				var urlParams = readParams()
-				if (window.location.hash == '') {
+				if (window.location.hash === '') {
 					window.location.replace(window.location.href.split('#')[0] + '#/')
 				}
 
-				if (urlParams[0] == '#') {
-					var pageName = urlParams[1] != '' ? urlParams[1] : 'homepage'
+				if (urlParams[0] === '#') {
+					var pageName = urlParams[1] ? urlParams[1] : 'homepage'
 					var templateName = '#' + pageName
 					
-					if ($('.router-page:visible').attr('id') != urlParams[1]) {
+					if ($('.router-page:visible').attr('id') !== urlParams[1]) {
 						$('div.router-page').hide()
 						if ($(templateName).length) {
 							$(templateName).show()
@@ -568,14 +568,15 @@
 							var block_hash = urlParams[2]
 							var api = urlParams[3]
 							var data_block_hash = $('#block-info-hash').attr('data-block-info-hash')
-							if (block_hash != undefined) {
-								if (api != undefined) {
+							if (block_hash) {
+								if (api) {
 									page = urlParams[1] + '/' + urlParams[2]
 									switchApi(api, page)
 								} else {
-									if (data_block_hash != urlParams[2]) {
+									if (data_block_hash !== urlParams[2]) {
 										$('#block-info-tx-total').addClass('d-none')
 										$('#block-info-table').empty()
+										$('#block-transactions').empty()
 
 										try {
 											const block = await blockInfo(block_hash)
@@ -604,12 +605,12 @@
 							var tx_hash = urlParams[2]
 							var api = urlParams[3]
 							var data_tx_hash = $('#tx-info-hash').attr('data-tx-info-hash')
-							if (tx_hash != undefined) {
-								if (api != undefined) {
+							if (tx_hash) {
+								if (api) {
 									page = urlParams[1] + '/' + urlParams[2]
 									switchApi(api, page)
 								} else {
-									if (data_tx_hash != urlParams[2]) {
+									if (data_tx_hash !== urlParams[2]) {
 										$('#tx-info-vout-total').addClass('d-none')
 										$('#tx-info-vin-total').addClass('d-none')
 										$('#tx-info-table').empty()
@@ -639,12 +640,12 @@
 							var address = urlParams[2]
 							var api = urlParams[3]
 							var data_address = $('#data-address').attr('data-address')
-							if (address != undefined) {
-								if (api != undefined) {
+							if (address) {
+								if (api) {
 									page = urlParams[1] + '/' + urlParams[2]
 									switchApi(api, page)
 								} else {
-									if (data_address != urlParams[2]) {
+									if (data_address !== urlParams[2]) {
 										$('#address-history').addClass('d-none')
 										$('#address-info-table').empty()
 										$('#address-transactions').empty()
@@ -670,26 +671,6 @@
 
 							break
 
-						// Redirect to block page by block height
-						case 'height':
-							block_height = urlParams[2]
-							if (block_height != undefined && isNumeric(block_height)) {
-								blockInfo(urlParams[2]).then(function(block) {
-									setTitle('Loading')
-									if (block['error'] == undefined) {
-										switchPage('block', [block['result']['hash']])
-									} else {
-										showError(errorMessages['blocks-load-error'])
-										switchPage()
-									}
-								})
-							} else {
-								showError(errorMessages['nan-error'])
-								switchPage()
-							}
-
-							break
-
 						// Home page ¯\_(ツ)_/¯
 						case 'homepage':
 							setTitle('Latest Blocks')
@@ -700,7 +681,7 @@
 						// Swith network to explore
 						case 'network':
 							network = urlParams[2]
-							if (network != undefined) {
+							if (network) {
 								switchApi(network)
 							}
 
@@ -822,7 +803,7 @@
 				const newBlocks = prepend ? [...blocks].reverse() : [...blocks] 
 
 				newBlocks.forEach(function(block, index) {
-					if ($('tr[data-height="' + block.height + '"]').length == 0) {
+					if ($('tr[data-height="' + block.height + '"]').length === 0) {
 						var content = `
 							<tr data-height="${block.height}">
 								<td>
@@ -839,7 +820,7 @@
 									</a>
 								</td>
 								<td>
-									${block.txCount != undefined ? block.txCount : '1'}
+									${block.txCount}
 								</td>
 							</tr>`
 
@@ -850,14 +831,13 @@
 						}
 					}	
 
-					if (block.height == 0) {
+					if (block.height === 0) {
 						$('#more').addClass('d-none')
 					}
 				});
 			}
 
 			function displayBlockInfo(data) {
-				$('#block-transactions').empty()
 				content = `
 					<div class="card mb-3">
 						<div class="table-responsive">
@@ -887,7 +867,7 @@
 									<tr>
 										<td>Next Block</td>
 										<td>
-											${data.nextBlockHash != undefined ? `
+											${data.nextBlockHash ? `
 												<a href="#/block/${data.nextBlockHash}">
 													${data.nextBlockHash}
 												</a>
@@ -1270,7 +1250,7 @@
 
 			function displayTxVout(vout_list, fee = 0) {
 				vout_list.forEach(function(vout, index) {
-					if ($('#tx-vout-list').find(`[data-tx-vout-index="${index}"]`).length == 0) {
+					if ($('#tx-vout-list').find(`[data-tx-vout-index="${index}"]`).length === 0) {
 						if (vout.isAddress) {
 							var content = `
 								<a href="#/address/${vout.addresses[0]}" data-tx-vout-index="${vout.vout_index}" class="list-group-item list-group-item-action flex-column align-items-start">
@@ -1317,10 +1297,10 @@
 			function displayTxVin(vin_list) {
 				var total = $('#tx-info-vin-total .card-header b').text()
 				vin_list.forEach(function(vin, index) {
-					if (vin['coinbase'] != undefined) {
+					if (vin['coinbase']) {
 						$('#tx-vin-list').append('Newly Generated Coins (<b>Coinbase Transaction</b>)')
 					} else {
-						if ($('#tx-vin-list').find(`[data-tx-vin-index="${index}"]`).length == 0) {
+						if ($('#tx-vin-list').find(`[data-tx-vin-index="${index}"]`).length === 0) {
 							var content = `
 							<div class="list-group-item flex-column align-items-start" data-tx-vin-index="${vin.vin_index}">
 								<div class="row">
@@ -1495,7 +1475,7 @@
 				var bytes = [0]
 				for (var i = 0; i < string.length; i++) {
 					var value = bs58AlphabetMap[string[i]]
-					if (value === undefined) throw new Error('Non-base' + base + ' character')
+					if (!value && value !== 0) throw new Error('Non-base' + base + ' character')
 
 					var carry = bytes[0] * base + value
 					bytes[0] = carry & 0xff
@@ -1595,12 +1575,12 @@
 			function bech32Data(addr) {
 				var hrp = getApi()['hrp']
 				var dec = bech32Decode(addr)
-				if (dec === null || dec.hrp !== hrp || dec.data.length < 1 || dec.data[0] > 16) {
+				if (!dec || dec.hrp !== hrp || dec.data.length < 1 || dec.data[0] > 16) {
 					return null
 				}
 
 				var res = convertBits(dec.data.slice(1), 5, 8, false)
-				if (res === null || res.length < 2 || res.length > 40) {
+				if (!res || res.length < 2 || res.length > 40) {
 					return null
 				}
 
@@ -1730,7 +1710,7 @@
 									await transactionInfo(search)
 									switchPage('tx', [search])
 								}
-							} else if (search.length == 34 || search.substring(0, 5) == getApi()['hrp']) {
+							} else if (search.length === 34 || search.substring(0, 5) === getApi()['hrp']) {
 								switchPage('address', [search])
 							} else {
 								showError(errorMessages['search-error'])
