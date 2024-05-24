@@ -647,6 +647,7 @@
 									if (data_address != urlParams[2]) {
 										$('#address-history').addClass('d-none')
 										$('#address-info-table').empty()
+										$('#address-transactions').empty()
 
 										try {
 											const addrData = await addressHistory(address)
@@ -1024,7 +1025,6 @@
 			}
 
 			function displayAddressInfo(data) {
-				$('#address-transactions').empty()
 				content = `
 					<div class="card mb-3">
 						<div class="table-responsive">
