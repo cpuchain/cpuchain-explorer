@@ -1197,7 +1197,7 @@
 				})
 			}
 
-			function displayTransactions(holder, data, offset = 1) {
+			function displayTransactions(holder, data = [], offset = 1) {
 				data.forEach(function(tx) {
 					content = `
 						<div class="card mt-3 light-shadow" data-transaction="${tx.txid}" data-transaction-index="${offset}" data-transaction-loaded="false">
