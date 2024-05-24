@@ -6,8 +6,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
-
-		<link rel="stylesheet" href="https://raw.githubusercontent.com/volbil/volbil.github.io/master/entypo/entypo.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 		
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
@@ -51,10 +50,6 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
-			}
-			[class*="entypo"]:before {
-				font-family: 'EntypoRegular', sans-serif;
-				font-size: 16px;
 			}
 			@media (max-width: 991.98px) {
 				.navbar-expand-lg>.container, .navbar-expand-lg>.container-fluid {
@@ -1101,7 +1096,7 @@
 
 					content = `
 						<a class="list-group-item list-group-item-action" href="#/address/${address}">
-							<span class="entypo up text-danger"></span>
+							<span class="fa-solid fa-arrow-up text-danger"></span>
 							<span class="text-primary">${address}</span>
 							<small class="float-right text-muted">
 								<span class="text-monospace">${transfer_amount}</span>
@@ -1133,7 +1128,7 @@
 
 					content = `
 						<a class="list-group-item list-group-item-action" href="#/address/${address}">
-							<span class="entypo down text-success"></span>
+							<span class="fa-solid fa-arrow-down text-success"></span>
 							<span class="text-primary">${address}</span>
 							<small class="float-right text-muted">
 								<span class="text-monospace">${transfer_amount}</span>
@@ -1257,7 +1252,7 @@
 									<div class="row">
 										<div class="col-md-9 col-sm-12 col-xs-12">
 											<span class="text-muted mr-1">
-												<span class="entypo down text-success"></span>
+												<span class="fa-solid fa-arrow-down text-success"></span>
 											</span>
 											<span class="text-primary">${vout.addresses[0]}</span>
 										</div>
@@ -1306,7 +1301,7 @@
 								<div class="row">
 									<div class="col-md-9 col-sm-12 col-xs-12">
 										<span class="text-muted mr-1">
-											<span class="entypo up text-danger"></span>
+											<span class="fa-solid fa-arrow-up text-danger"></span>
 										</span>
 										<a href="#/address/${vin.addresses[0]}">
 											${vin.addresses[0]}
