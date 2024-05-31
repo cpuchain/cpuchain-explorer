@@ -14,6 +14,8 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment-with-locales.min.js"></script>
 		<script src="https://code.highcharts.com/highcharts.src.js"></script>
+
+		<script src="./bitcoinjs.min.js"></script>
 		
 		<link rel="icon" type="image/png" href="https://cpuchain.org/cpuchain.png">
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap" rel="stylesheet">
@@ -281,10 +283,21 @@
 					'api': 'https://blockbook.cpuchain.org/api/v2',
 					'ticker': 'CPU',
 					'decimals': 8,
-					'hrp': 'cpu',
 					blockTime: 60,
 					reward: 50,
-					halvingInterval: 1050000
+					halvingInterval: 1050000,
+					// network object for bitcoinjs-lib to validate address
+					network: {
+						messagePrefix: '\x19CPUchain Signed Message:\n',
+						bip32: {
+							public: 0x0488b21e,
+							private: 0x0488ade4
+						},
+						bech32: 'cpu',
+						pubKeyHash: 0x1C,
+						scriptHash: 0x1E,
+						wif: 0x80
+					}
 				},
 			}
 
@@ -434,6 +447,20 @@
 					}
 				});
 				$('.highcharts-credits').hide();
+			}
+
+			function getAddressScript(address) {
+				return bitcoin.address.toOutputScript(address, getApi()['network'])
+			}
+
+			function validateAddress(address) {
+				try {
+					getAddressScript(address)
+					return true
+				} catch (e) {
+					console.log(e)
+					return false
+				}
 			}
 
 			function getHashFromDiff(difficulty) {
@@ -1446,155 +1473,6 @@
 				}, 3400);
 			}
 
-			// Decode base58 encoded string to byte array
-			function base58Data(string) {
-				bs58Alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-				var bs58AlphabetMap = {}
-				var base = bs58Alphabet.length
-				var leader = bs58Alphabet.charAt(0)
-
-				for (var i = 0; i < bs58Alphabet.length; i++) {
-					bs58AlphabetMap[bs58Alphabet.charAt(i)] = i
-				}
-
-				if (string.length === 0) return []
-
-				var bytes = [0]
-				for (var i = 0; i < string.length; i++) {
-					var value = bs58AlphabetMap[string[i]]
-					if (!value && value !== 0) throw new Error('Non-base' + base + ' character')
-
-					var carry = bytes[0] * base + value
-					bytes[0] = carry & 0xff
-					carry >>= 8
-
-					for (var j = 1; j < bytes.length; ++j) {
-						carry += bytes[j] * base
-						bytes[j] = carry & 0xff
-						carry >>= 8
-					}
-
-					while (carry > 0) {
-						bytes.push(carry & 0xff)
-						carry >>= 8
-					}
-				}
-
-				for (var k = 0; string[k] === leader && k < string.length - 1; ++k) {
-					bytes.push(0)
-				}
-
-				return bytes.reverse()
-			}
-
-			function bech32Decode(bechString) {
-				var charset = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l'
-
-				var p;
-				var has_lower = false;
-				var has_upper = false;
-
-				for (p = 0; p < bechString.length; ++p) {
-					if (bechString.charCodeAt(p) < 33 || bechString.charCodeAt(p) > 126) {
-						return null;
-					}
-					if (bechString.charCodeAt(p) >= 97 && bechString.charCodeAt(p) <= 122) {
-						has_lower = true;
-					}
-					if (bechString.charCodeAt(p) >= 65 && bechString.charCodeAt(p) <= 90) {
-						has_upper = true;
-					}
-				}
-
-				if (has_lower && has_upper) {
-					return null;
-				}
-
-				bechString = bechString.toLowerCase();
-				var pos = bechString.lastIndexOf('1');
-				if (pos < 1 || pos + 7 > bechString.length || bechString.length > 90) {
-					return null;
-				}
-
-				var hrp = bechString.substring(0, pos);
-				var data = [];
-				for (p = pos + 1; p < bechString.length; ++p) {
-					var d = charset.indexOf(bechString.charAt(p));
-					if (d === -1) {
-						return null;
-					}
-					data.push(d);
-				}
-
-				return {
-					'hrp': hrp,
-					'data': data.slice(0, data.length - 6)
-				};
-			}
-
-			function convertBits(data, frombits, tobits, pad) {
-				var acc = 0;
-				var bits = 0;
-				var ret = [];
-				var maxv = (1 << tobits) - 1;
-				for (var p = 0; p < data.length; ++p) {
-					var value = data[p];
-					if (value < 0 || (value >> frombits) !== 0) {
-						return null;
-					}
-					acc = (acc << frombits) | value;
-					bits += frombits;
-					while (bits >= tobits) {
-						bits -= tobits;
-						ret.push((acc >> bits) & maxv);
-					}
-				}
-				if (pad) {
-					if (bits > 0) {
-						ret.push((acc << (tobits - bits)) & maxv);
-					}
-				} else if (bits >= frombits || ((acc << (tobits - bits)) & maxv)) {
-					return null;
-				}
-				return ret;
-			}
-
-			function bech32Data(addr) {
-				var hrp = getApi()['hrp']
-				var dec = bech32Decode(addr)
-				if (!dec || dec.hrp !== hrp || dec.data.length < 1 || dec.data[0] > 16) {
-					return null
-				}
-
-				var res = convertBits(dec.data.slice(1), 5, 8, false)
-				if (!res || res.length < 2 || res.length > 40) {
-					return null
-				}
-
-				if (dec.data[0] === 0 && res.length !== 20 && res.length !== 32) {
-					return null
-				}
-
-				return {'version': dec.data[0], 'program': res}
-			}
-
-			// Convert byte array to hex sting
-			function hexString(byteArray) {
-				return Array.from(byteArray, function(byte) {
-					return ('0' + (byte & 0xFF).toString(16)).slice(-2);
-				}).join('')
-			}
-
-			function hash160(string) {
-				try {
-					var result = hexString(base58Data(string)) 
-					return result.substring(2, result.length - 8)
-				} catch {
-					var result = hexString(bech32Data(string).program) 
-					return result
-				}
-			}
-
 			function initRouter() {
 				routePage()
 				window.router = false
@@ -1685,29 +1563,31 @@
 					var search = $('#search-form input').val().trim()
 
 					if (search) {
+						let searchType = ''
+
 						try {
 							if (isNumeric(search)) {
 								await blockInfo(search)
-								switchPage('block', [search])
-							} else if (search.length == 64) {
+								searchType = 'block'
+							} else if (search.length === 64) {
 								try {
 									await blockInfo(search)
-									switchPage('block', [search])
+									searchType = 'block'
 								} catch {
 									await transactionInfo(search)
-									switchPage('tx', [search])
+									searchType = 'tx'
 								}
-							} else if (search.length === 34 || search.substring(0, 5) === getApi()['hrp']) {
-								switchPage('address', [search])
 							} else {
-								showError(errorMessages['search-error'])
+								validateAddress(search)
+								searchType = 'address'
 							}
-							
-							$('#search-form input').val('')
 						} catch (err) {
 							console.log(err)
 							showError(errorMessages['search-error'])
 						}
+
+						switchPage(searchType, [search])
+						$('#search-form input').val('')
 					}
 				})
 
