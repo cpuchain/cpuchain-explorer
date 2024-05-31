@@ -1013,24 +1013,16 @@
 										</td>
 									</tr>
 									<tr>
-										<td>Hash160</td>
-										<td>${hash160(data.address)}</td>
-									</tr>
-									<tr>
-										<td>Balance</td>
-										<td><span class="text-monospace">${amountFormat(Number(data.balance))}</span> <b>${getApi()['ticker']}</b></td>
-									</tr>
-									<tr>
-										<td>Unconfirmed Balance</td>
-										<td><span class="text-monospace">${amountFormat(Number(data.unconfirmedBalance))}</span> <b>${getApi()['ticker']}</b></td>
-									</tr>
-									<tr>
-										<td>Received</td>
+										<td>Total received</td>
 										<td><span class="text-monospace">${amountFormat(Number(data.totalReceived))}</span> <b>${getApi()['ticker']}</b></td>
 									</tr>
 									<tr>
-										<td>Sent</td>
+										<td>Total sent</td>
 										<td><span class="text-monospace">${amountFormat(Number(data.totalSent))}</span> <b>${getApi()['ticker']}</b></td>
+									</tr>
+									<tr>
+										<td>Balance</td>
+										<td><span class="text-monospace">${amountFormat(Number(data.balance) + Number(data.unconfirmedBalance))}</span> <b>${getApi()['ticker']}</b></td>
 									</tr>
 									<tr>
 										<td>Txs</td>
