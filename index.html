@@ -299,7 +299,29 @@
 						wif: 0x80
 					}
 				},
+				'TCPU': {
+					'name': 'CPUchain Testnet',
+					'api': 'https://testnet-blockbook.cpuchain.org/api/v2',
+					'ticker': 'CPU',
+					'decimals': 8,
+					blockTime: 60,
+					reward: 50,
+					halvingInterval: 1050000,
+					network: {
+						messagePrefix: '\x19CPUchain Signed Message:\n',
+						bip32: {
+							public: 0x043587CF,
+							private: 0x04358394
+						},
+						bech32: 'tcpu',
+						pubKeyHash: 0x6F,
+						scriptHash: 0xC4,
+						wif: 0xEF
+					}
+				},
 			}
+
+			let cachedBlocks = []
 
 			// Error messages
 			var errorMessages = {
@@ -542,8 +564,9 @@
 			// Switch network
 			function switchApi(network, page = '') {
 				network = network.toUpperCase()
-				if (networksConfigs[network] & networksConfigs[network] !== getApi()) {
+				if (networksConfigs[network] && networksConfigs[network] !== getApi()) {
 					setCookie("network", network, 60)
+					cachedBlocks = []
 					$('#blocks-table tbody').empty()
 					$('#block-info-hash').empty()
 					$('#data-address').empty()
@@ -1340,8 +1363,6 @@
 					}
 				})
 			}
-
-			let cachedBlocks = []
 
 			function drawChart() {
 				const chart_data = {
