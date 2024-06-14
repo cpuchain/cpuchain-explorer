@@ -1046,7 +1046,7 @@
 				$('#tx-vin-list').empty()
 
 				displayTxVout(data.vout, Number(data.fees))
-				displayTxVin(data.vin)
+				displayTxVin(data.vin, data.vout)
 
 				$('#tx-info-vout-total').removeClass('d-none')
 				$('#tx-info-vin-total').removeClass('d-none')
@@ -1301,7 +1301,7 @@
 					if ($('#tx-vout-list').find(`[data-tx-vout-index="${index}"]`).length === 0) {
 						if (vout.isAddress) {
 							var content = `
-								<a href="#/address/${vout.addresses[0]}" data-tx-vout-index="${vout.vout_index}" class="list-group-item list-group-item-action flex-column align-items-start">
+								<a href="#/address/${vout.addresses[0]}" data-tx-vout-index="${index}" class="list-group-item list-group-item-action flex-column align-items-start">
 									<div class="row">
 										<div class="col-md-9 col-sm-12 col-xs-12">
 											<span class="text-muted mr-1">
@@ -1342,15 +1342,44 @@
 				}
 			}
 
-			function displayTxVin(vin_list) {
+			function hex2a(hexx) {
+				var hex = String(hexx);
+				var str = '';
+				for (var i = 0; i < hex.length; i += 2) {
+					str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+				}
+				return str;
+			}
+
+			function displayTxVin(vin_list, vout_list) {
 				var total = $('#tx-info-vin-total .card-header b').text()
 				vin_list.forEach(function(vin, index) {
-					if (vin['coinbase']) {
-						$('#tx-vin-list').append('Newly Generated Coins (<b>Coinbase Transaction</b>)')
+					if (vin.coinbase) {
+						const rewards = (vout_list || []).reduce((acc, curr) => acc + Number(curr?.value || 0), 0);
+
+						var content = `
+							<div class="list-group-item flex-column align-items-start" data-tx-vin-index="${index}">
+								<div class="row">
+									<div class="col-md-9 col-sm-12 col-xs-12">
+										<span class="text-muted mr-1">
+											<span class="fa-solid fa-arrow-up text-danger"></span>
+										</span>
+										<code>${hex2a(vin.coinbase)}</code> (<b>Coinbase Transaction</b>)
+									</div>
+									<div class="col-md-3 col-sm-12 col-xs-12 text-md-right">
+										<small class="text-muted">
+											<span class="text-monospace">${amountFormat(rewards)}</span> <b>${getApi()['ticker']}</b>
+										</small>
+									</div>
+								</div>
+							</div>`
+
+						$('#tx-vin-list').append(content)
+
 					} else {
 						if ($('#tx-vin-list').find(`[data-tx-vin-index="${index}"]`).length === 0) {
 							var content = `
-							<div class="list-group-item flex-column align-items-start" data-tx-vin-index="${vin.vin_index}">
+							<div class="list-group-item flex-column align-items-start" data-tx-vin-index="${index}">
 								<div class="row">
 									<div class="col-md-9 col-sm-12 col-xs-12">
 										<span class="text-muted mr-1">
