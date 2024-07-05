@@ -326,6 +326,7 @@
 			}
 
 			let cachedBlocks = []
+			let cachedBlocksPage = 0;
 
 			// Error messages
 			var errorMessages = {
@@ -537,14 +538,6 @@
 				return supply;
 			}
 
-			function range(size, startAt = 0) {
-				return [...Array(size).keys()].map(i => i + startAt);
-			}
-
-			function sleep(ms = 0) {
-				return new Promise(resolve => setTimeout(resolve, ms));
-			}
-
 			// Display doc links
 			function displayDocs() {
 				$('a.api-link').each(function() {
@@ -577,7 +570,8 @@
 				network = network.toUpperCase()
 				if (networksConfigs[network] && networksConfigs[network] !== getApi()) {
 					setCookie("network", network, 60)
-					cachedBlocks = []
+					cachedBlocks = [];
+					cachedBlocksPage = 0;
 					$('#blocks-table tbody').empty()
 					$('#block-info-hash').empty()
 					$('#data-address').empty()
@@ -768,39 +762,34 @@
 			}
 
 			// Blocks request
-			function getBlocks(blocks = []) {
-				return Promise.all(blocks.map(async (block, index) => {
-					// sleep to comply with rate limits
-					await sleep(index * 20);
-
-					const resp = await fetch(`${getApi()['api']}/block/${block}`, {
-						method: 'GET',
-						headers: {
-							'Content-Type': 'application/json'
-						}
-					});
-					
-					const data = await resp.json();
-
-					return {
-						height: data.height,
-						hash: data.hash,
-						difficulty: Number(data.difficulty),
-						nethash: getHashFromDiff(data.difficulty),
-						merkleRoot: data.merkleRoot,
-						nonce: data.nonce,
-						previousBlockHash: data.previousBlockHash,
-						size: data.size,
-						time: data.time,
-						txCount: data.txCount,
-						version: data.version
+			async function getBlocks(page = 0) {
+				const resp = await fetch(`${getApi()['api']}/blocks/?page=${page}&pageSize=25`, {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json'
 					}
+				});
+
+				const result = await resp.json();
+
+				return result.map(data => ({
+					height: data.height,
+					hash: data.hash,
+					difficulty: Number(data.difficulty),
+					nethash: getHashFromDiff(data.difficulty),
+					merkleRoot: data.merkleRoot,
+					nonce: data.nonce,
+					previousBlockHash: data.previousBlockHash,
+					size: data.size,
+					time: data.time,
+					txCount: data.txCount,
+					version: data.version
 				}))
 			}
 
 			// Block info
 			async function blockInfo(block, offset = 1) {
-				const resp = await fetch(`${getApi()['api']}/block/${block}?page=${offset}`, {
+				const resp = await fetch(`${getApi()['api']}/block/${block}?page=${offset}&pageSize=25`, {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json'
@@ -828,7 +817,7 @@
 
 			// Get address history
 			async function addressHistory(address, offset = 1) {
-				const resp = await fetch(`${getApi()['api']}/address/${address}?page=${offset}&details=txs`, {
+				const resp = await fetch(`${getApi()['api']}/address/${address}?page=${offset}&pageSize=25&details=txs`, {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json'
@@ -1012,7 +1001,7 @@
 									</tr>
 									<tr>
 										<td>Fees</td>
-										<td><span class="text-monospace">${amountFormat(Number(data.fees))}</span> <b>${getApi()['ticker']}</b> (<b>${(Number(data.fees) / (data.vsize || data.size)).toFixed(3)} sat/Byte</b>)</td>
+										<td><span class="text-monospace">${amountFormat(Number(data.fees))}</span> <b>${getApi()['ticker']}</b> (<b>${(Number(data.fees) / (data.vsize || data.size)).toFixed(3)} sat/vByte</b>)</td>
 									</tr>
 									<tr>
 										<td>Size</td>
@@ -1426,31 +1415,15 @@
 					showCharts(chart_data)
 			}
 
-			/**
-			 * Since current API doesn't support fetching recent block hashes,
-			 * We simply ignore reorgs and it wouldn't be shown at the main page unless refreshed
-			 * To fix this, either blockbook needs to support fetching multiple block hashes,
-			 * Or we use websocket subscription here
-			 */
 			async function displayHome() {
 				try {
 					$('#supply span').text('Loading...')
 					const infoData = await networkInfo()
-					const current_height = infoData.headers
-					const display_height = cachedBlocks[0]?.height
-					const circulatingSupply = calculateSupply(current_height)
+					const circulatingSupply = calculateSupply(infoData.headers)
 
 					$('#supply span').text(circulatingSupply.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' ' + getApi()['ticker'])
 
-					const start_height = display_height || (current_height > LOAD_BLOCK ? current_height - LOAD_BLOCK : 0)
-					let block_diff = current_height - start_height
-					if (block_diff <= 0) {
-						return
-					}
-
-					const blocksToFetch = range(block_diff, start_height + 1).reverse()
-
-					const blocks = await getBlocks(blocksToFetch)
+					const blocks = await getBlocks()
 
 					const uniqueBlocks = new Set();
 
@@ -1557,17 +1530,8 @@
 
 				$('#more').click(async function() {
 					try {
-						const height = cachedBlocks[cachedBlocks.length - 1]?.height
-						
-						if (!height) {
-							return
-						}
-						
-						const start_height = height > LOAD_BLOCK ? height - LOAD_BLOCK : 0
-						const block_diff = height - start_height
-						const blocksToFetch = range(block_diff, start_height + 1).reverse()
-						
-						const blocks = await getBlocks(blocksToFetch)
+						cachedBlocksPage++;
+						const blocks = await getBlocks(cachedBlocksPage)
 						
 						const uniqueBlocks = new Set();
 						
