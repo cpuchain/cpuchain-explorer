@@ -761,6 +761,19 @@
 				document.title = title + ` | ${getApi()['name']} Explorer`;
 			}
 
+			async function getBlockHeight() {
+				const resp = await fetch(`${getApi()['api']}/block-height/`, {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
+
+				const result = await resp.json();
+
+				return result.height
+			}
+
 			// Blocks request
 			async function getBlocks(page = 0) {
 				const resp = await fetch(`${getApi()['api']}/blocks/?page=${page}&pageSize=25`, {
@@ -1417,9 +1430,14 @@
 
 			async function displayHome() {
 				try {
+					const blockHeight = await getBlockHeight();
+
+					if (blockHeight === cachedBlocks[0]?.height) {
+						return;
+					}
+
 					$('#supply span').text('Loading...')
-					const infoData = await networkInfo()
-					const circulatingSupply = calculateSupply(infoData.headers)
+					const circulatingSupply = calculateSupply(blockHeight)
 
 					$('#supply span').text(circulatingSupply.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' ' + getApi()['ticker'])
 
@@ -1618,7 +1636,7 @@
 
 				window.setInterval(function() {
 					displayHome()
-				}, 10000);
+				}, getApi().blockTime * 1000);
 			})
 		</script>
 	</body>
