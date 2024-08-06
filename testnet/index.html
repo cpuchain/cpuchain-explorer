@@ -5,20 +5,28 @@
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-		
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment-with-locales.min.js"></script>
-		<script src="https://code.highcharts.com/highcharts.src.js"></script>
+		<title>Blockchain Explorer</title>
+		<meta name="description" content="CPUchain Blockchain Explorer">
 
-		<script src="./bitcoinjs.min.js"></script>
-		
 		<link rel="icon" type="image/png" href="https://cpuchain.org/cpuchain.png">
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@jsweb/font-awesome-base64@2.4.2/fa-all.css" integrity="sha384-rAubePlPr5GmhldeD91zL0pl+HTbUXQ68qd7Dw9hoghRR4PBSVDG5ms/fhlYX1vW" crossorigin="anonymous">
+
+		<script>
+			globalThis.process = {
+				browser: true
+			}
+		</script>
+
+		<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js" integrity="sha384-1H217gwSVyLSIfaLxHbE7dRb3v4mYCKbpQvzx0cegeju1MVsGrX5xXxAvs/HgeFs" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/jquery.qrcode@1.0.3/jquery.qrcode.min.js" integrity="sha384-0B/45e2to395pfnCkbfqwKFFwAa7zXdvd42eAFJa3Vm8KZ/jmHdn93XdWi//7MDS" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/min/moment.min.js" integrity="sha384-jzJ+sNWbKe71gDLLfQKgdtslQjhK70oKLFN+wmwxyg6mQN7Vem+wzce4pryF0HP/" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/highcharts@11.4.6/highcharts.js" integrity="sha384-iKWNN2K0IFiGHvgJGh0pRyqsX+Dpmm+OttyyuFo0JpZogaKhFL4LMjuGqPNMYgK5" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/btc-signer@1.0.7/lib/btcSigner.umd.min.js" integrity="sha384-z0IRnXRK3SDK+ypyUzTQGHuoNfIdyw17lYAjhwQMIg4IZg91iHAnK/s/ttg+rjVD" crossorigin="anonymous"></script>
 
 		<style>
 			html {
@@ -75,8 +83,6 @@
 				font-size: 12px;
 			}
 		</style>
-		<title>Blockchain Explorer</title>
-		<meta name="description" content="CPUchain Blockchain Explorer">
 	</head>
 	<body>
 		<!-- Navbar -->
@@ -274,6 +280,7 @@
 
 		<!-- All magic is here :D -->
 		<script>
+			const { bitcoin } = btcSigner;
 			// load 15 blocks per request by default, can add more blocks but it will make the page slower
 			const LOAD_BLOCK = 15
 			// Config
