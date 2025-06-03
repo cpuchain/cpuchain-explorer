@@ -11,14 +11,14 @@
 		<link rel="icon" type="image/png" href="cpuchain.png">
 
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@jsweb/font-awesome-base64@2.4.2/fa-all.css" integrity="sha384-rAubePlPr5GmhldeD91zL0pl+HTbUXQ68qd7Dw9hoghRR4PBSVDG5ms/fhlYX1vW" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome-bundled@6.7.2/all.css" integrity="sha384-xXkvQZo+0d75L4rAc1Wje3SnTigGE9sd4i3XHVIAgz46uAI0UbLnaJLlb7soBkrO" crossorigin="anonymous">
 
 		<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js" integrity="sha384-1H217gwSVyLSIfaLxHbE7dRb3v4mYCKbpQvzx0cegeju1MVsGrX5xXxAvs/HgeFs" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/jquery.qrcode@1.0.3/jquery.qrcode.min.js" integrity="sha384-0B/45e2to395pfnCkbfqwKFFwAa7zXdvd42eAFJa3Vm8KZ/jmHdn93XdWi//7MDS" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/min/moment.min.js" integrity="sha384-jzJ+sNWbKe71gDLLfQKgdtslQjhK70oKLFN+wmwxyg6mQN7Vem+wzce4pryF0HP/" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/highcharts@12.2.0/highcharts.js" integrity="sha384-JEEYKZ+82Rp3Tj8kRBm8HzlbruoqzTvGBbcwUkU5++DHrQDflPR8Gs/ynOqNsKSF" crossorigin="anonymous"></script>
-		<script src="https://cdn.jsdelivr.net/npm/btc-signer@1.1.0/lib/bitcoin.umd.min.js" integrity="sha384-Mz2ePSJXKLEKK3FitWWmIOGhFwWyMxhWbKHXKNSiN+gR1Tb0hBNQ03NU3Ece3037" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/btc-signer@1.1.1/lib/bitcoin.umd.min.js" integrity="sha384-0zuIxIaDOHI6Z6pfcTwoxlBrhrbxtQR7J/b1j4EowJI0VZL+Vi+S4QCa0jBNuQkv" crossorigin="anonymous"></script>
 
 		<style>
 			html {
@@ -279,6 +279,8 @@
 			const TESTNET_ONLY = true;
 
 			const cookieValue = {};
+
+			let page = '';
 
 			var networksConfigs = {
 				'CPU': {
@@ -612,6 +614,8 @@
 						}
 					}
 
+					page = pageName;
+
 					switch(pageName) {
 						// Block info page
 						case 'block':
@@ -784,6 +788,8 @@
 				});
 
 				const result = await resp.json();
+
+				console.log(`Fetched ${result.length} blocks (${page} page)`);
 
 				return result.map(data => ({
 					height: data.height,
@@ -1550,10 +1556,6 @@
 				initRouter()
 				displayNetworks()
 
-				$('#supply').click(function() {
-					displayHome()
-				})
-
 				$('#more').click(async function() {
 					try {
 						cachedBlocksPage++;
@@ -1643,7 +1645,9 @@
 				})
 
 				window.setInterval(function() {
-					displayHome()
+					if (page === 'homepage') {
+						displayHome();
+					}
 				}, getApi().blockTime * 1000);
 			})
 		</script>
