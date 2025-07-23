@@ -275,8 +275,8 @@
 			// load 15 blocks per request by default, can add more blocks but it will make the page slower
 			const LOAD_BLOCK = 15
 			// Config
-			const DEFAULT_COIN = 'CPU';
-			const TESTNET_ONLY = false;
+			const DEFAULT_COIN = 'TCPU';
+			const TESTNET_ONLY = true;
 
 			const cookieValue = {};
 
@@ -521,7 +521,7 @@
 			}
 
 			function calculateSupply(height = 0) {
-				const { reward, halvingInterval, ticker } = getApi();
+				const { reward, halvingInterval } = getApi();
 				const halvings_count = Math.floor(height / halvingInterval);
 				let supply = 0;
 				let count = 0;
@@ -535,11 +535,6 @@
 					supply += currentReward * blocks;
 					currentReward = currentReward / 2;
 					count++;
-
-					// override reward for CPUchain as it has halted rewards
-					if (ticker === 'CPU' && count >= 3) {
-						break;
-					}
 				}
 
 				return supply;

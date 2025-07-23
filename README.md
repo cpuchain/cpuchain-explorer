@@ -1,6 +1,5 @@
-# Simple Blockchain Explorer
-Nice and simple blockchain explorer with robust [ApiServer](https://github.com/MicroBitcoinOrg/ElectrumX/) backend :3
+# CPUchain Blockchain Explorer UI
 
-Feel free to modify/use it in your projects :D
+Simple Explorer Frontend powered by [Blockbook API](https://github.com/cpuchain/blockbook)
 
-P.s. Working example [https://sugar.wtf/#/](https://sugar.wtf/#/)
+Live version: [https://explorer.cpuchain.org/#/](https://explorer.cpuchain.org/#/)
